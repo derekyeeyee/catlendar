@@ -1,26 +1,50 @@
-@import "tailwindcss";
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
 
-:root {
-  --background: #ffffff;
-  --foreground: #171717;
+/* === Walking cat sprite (row 2: walking down) === */
+
+.cat-walk {
+  width: 32px;
+  height: 32px;
+
+
+  background-image: url("/stardew_cat.png");
+  background-repeat: no-repeat;
+
+  /* Start at row 1 (second row) */
+  background-position: 0px -32px;
+
+  transform-origin: top left;
+  
+
+  animation:
+    cat-walk-frames 1.5s steps(4) infinite,
+    cat-walk-move 15s linear infinite;
 }
 
-@theme inline {
-  --color-background: var(--background);
-  --color-foreground: var(--foreground);
-  --font-sans: var(--font-geist-sans);
-  --font-mono: var(--font-geist-mono);
-}
-
-@media (prefers-color-scheme: dark) {
-  :root {
-    --background: #0a0a0a;
-    --foreground: #ededed;
+/* Animate 4 frames across row 1 */
+@keyframes cat-walk-frames {
+  from {
+    background-position-x: 0px;
+  }
+  to {
+    background-position-x: -128px;
   }
 }
 
-body {
-  background: var(--background);
-  color: var(--foreground);
-  font-family: Arial, Helvetica, sans-serif;
+/* Walk left ↔ right */
+@keyframes cat-walk-move {
+  0% {
+    transform: translateX(-20vw) scale(5) scaleX(1);   /* right-facing */
+  }
+  50% {
+    transform: translateX(20vw) scale(5) scaleX(1);    /* at right edge */
+  }
+  50.01% {
+    transform: translateX(calc(20vw + 160px)) scale(5) scaleX(-1);   /* flip instantly */
+  }
+  100% {
+    transform: translateX(calc(-20vw + 160px)) scale(5) scaleX(-1);  /* walking back left */
+  }
 }
