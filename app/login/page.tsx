@@ -1,6 +1,39 @@
 import Link from "next/link";
+import { useState } from "react";
+import { useRouter } from "next/navigation";
+import { signIn } from "next-auth/react";
 
 export default function LoginPage() {
+
+  const router = useRouter();
+
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
+  const [error, setError] = useState("");
+  const [loading, setLoading] = useState(false);
+
+  async function handleSubmit(e: React.FormEvent<HTMLFormElement>) {
+    e.preventDefault();
+    setError("");
+    setLoading(true);
+
+    const result = await signIn("credentials", {
+      email: email.trim().toLowerCase(),
+      password,
+      redirect: false,
+    });
+
+    setLoading(false);
+
+    if (result?.error) {
+      setError("Invalid email or password");
+      return;
+    }
+
+    router.push("/calendar");
+    router.refresh(); // helps server components pick up the new session
+  }
+
   return (
     <main className="min-h-screen bg-slate-950 flex items-center justify-center px-4">
 
@@ -33,8 +66,12 @@ export default function LoginPage() {
             <input
               id="email"
               type="email"
+              value={email}
+              onChange={(e) => setEmail(e.target.value)}
               className="w-full px-4 py-2 rounded-lg bg-slate-800 border border-slate-700 text-slate-100 placeholder-slate-400 focus:outline-none focus:ring-2 focus:ring-sky-500 focus:border-transparent"
               placeholder="you@example.com"
+              required
+              autoComplete="email"
             />
           </div>
 
@@ -49,29 +86,34 @@ export default function LoginPage() {
             <input
               id="password"
               type="password"
+              value={password}
+              onChange={(e) => setPassword(e.target.value)}
               className="w-full px-4 py-2 rounded-lg bg-slate-800 border border-slate-700 text-slate-100 placeholder-slate-400 focus:outline-none focus:ring-2 focus:ring-sky-500 focus:border-transparent"
               placeholder="••••••••"
+              required
+              autoComplete="current-password"
             />
           </div>
 
           {/* Submit Button */}
           <button
             type="submit"
+            disabled={loading}
             className="w-full py-2.5 rounded-lg bg-sky-600 hover:bg-sky-500 text-white font-semibold transition-all shadow-md hover:shadow-sky-500/20"
           >
-            Log In
+            {loading ? "Logging in..." : "Log in"}
           </button>
         </form>
 
         {/* Optional: Sign Up Link */}
         <p className="mt-6 text-sm text-center text-slate-400">
           Don’t have an account?{" "}
-          <a
+          <Link
             href="/register"
             className="text-sky-400 hover:text-sky-300 underline"
           >
             Sign up
-          </a>
+          </Link>
         </p>
       </div>
     </main>

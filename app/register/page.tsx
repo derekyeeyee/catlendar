@@ -18,10 +18,19 @@ export default function RegisterPage() {
   async function handleSubmit(e: React.FormEvent<HTMLFormElement>) {
     e.preventDefault(); // 🚫 stop page refresh
 
+    setError("");
+
+    if (password !== confirmPassword) {
+      setError("Passwords do not match");
+      return;
+    }
+
+    const cleanEmail = email.trim().toLowerCase();
+
     const res = await fetch("/api/register", {
       method: "POST",
       headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ email, password }),
+      body: JSON.stringify({ name, cleanEmail, password }),
     });
 
     const data = await res.json();
@@ -57,6 +66,12 @@ export default function RegisterPage() {
         </p>
 
         {/* Register Form */}
+
+        {error && (
+          <p className="mb-4 text-sm text-red-500 text-center">{error}</p>
+        )}
+
+
         <form className="space-y-6" onSubmit = {handleSubmit}>
           
           {/* Name */}
@@ -74,6 +89,7 @@ export default function RegisterPage() {
               onChange={(e) => setName(e.target.value)}
               className="w-full px-4 py-2 rounded-lg bg-slate-800 border border-slate-700 text-slate-100 placeholder-slate-400 focus:outline-none focus:ring-2 focus:ring-sky-500 focus:border-transparent"
               placeholder="Your name"
+              required
             />
           </div>
 
@@ -130,6 +146,7 @@ export default function RegisterPage() {
               onChange={(e) => setConfirmPassword(e.target.value)}
               className="w-full px-4 py-2 rounded-lg bg-slate-800 border border-slate-700 text-slate-100 placeholder-slate-400 focus:outline-none focus:ring-2 focus:ring-sky-500 focus:border-transparent"
               placeholder="••••••••"
+              required
             />
           </div>
 
