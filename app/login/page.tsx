@@ -15,6 +15,9 @@ export default function LoginPage() {
   const [loading, setLoading] = useState(false);
 
   async function handleSubmit(e: React.FormEvent<HTMLFormElement>) {
+
+    if (loading) return;
+
     e.preventDefault();
     setError("");
     setLoading(true);
@@ -56,7 +59,7 @@ export default function LoginPage() {
           Log in to your Catlender account
         </p>
 
-        <form className="space-y-6">
+        <form className="space-y-6" onSubmit = {handleSubmit}>
           {/* Email */}
           <div>
             <label

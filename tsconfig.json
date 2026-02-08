@@ -29,6 +29,6 @@
     ".next/types/**/*.ts",
     ".next/dev/types/**/*.ts",
     "**/*.mts"
-, "prisma.config.ts.bak"  ],
+, "prisma.config.ts.bak", "app/api/auth/[...nextauth]/route.ts"  ],
   "exclude": ["node_modules"]
 }
