@@ -1,4 +1,6 @@
 // app/api/auth/[...nextauth]/route.ts
+export const runtime = "nodejs";
+
 import NextAuth, { type NextAuthOptions } from "next-auth";
 import CredentialsProvider from "next-auth/providers/credentials";
 import bcrypt from "bcrypt"; // or "bcryptjs" if you run into native-build issues
