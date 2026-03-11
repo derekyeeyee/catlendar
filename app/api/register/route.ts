@@ -4,6 +4,11 @@ import { NextResponse } from "next/server";
 import bcrypt from "bcrypt";
 import { pool } from "@/app/lib/db";
 
+function getErrorMessage(error: unknown) {
+  if (error instanceof Error) return error.message;
+  return "Server error";
+}
+
 export async function POST(req: Request) {
   try {
     const { email, password, name } = await req.json();
@@ -26,8 +31,8 @@ export async function POST(req: Request) {
     );
 
     return NextResponse.json({ ok: true }, { status: 201 });
-  } catch (e: any) {
-    console.error("REGISTER ERROR:", e);
-    return NextResponse.json({ error: e?.message ?? "Server error" }, { status: 500 });
+  } catch (error: unknown) {
+    console.error("REGISTER ERROR:", error);
+    return NextResponse.json({ error: getErrorMessage(error) }, { status: 500 });
   }
 }

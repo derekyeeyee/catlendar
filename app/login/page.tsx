@@ -59,6 +59,10 @@ export default function LoginPage() {
           Log in to your Catlendar account
         </p>
 
+        {error && (
+          <p className="mb-4 text-center text-sm text-red-500">{error}</p>
+        )}
+
         <form className="space-y-6" onSubmit = {handleSubmit}>
           {/* Email */}
           <div>

@@ -52,7 +52,7 @@ export const authOptions: NextAuthOptions = {
     async jwt({ token, user }) {
       // On initial sign-in, `user` will be defined — save userid into the token
       if (user) {
-        token.userId = (user as any).id;
+        token.userId = user.id;
       }
       return token;
     },
@@ -61,7 +61,7 @@ export const authOptions: NextAuthOptions = {
     async session({ session, token }) {
       // Attach userId to session.user so client/server can read it easily
       if (session.user) {
-        (session.user as any).id = token.userId as string | undefined;
+        session.user.id = token.userId;
       }
       return session;
     },
